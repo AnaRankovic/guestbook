@@ -47,6 +47,7 @@
 (-> "dd/MM/yyyy"
 (java.text.SimpleDateFormat.)
 (.format timestamp)))
+
 (defn show-guests []
 [:ul.guests
 (for [{:keys [message name timestamp]} (db/read-guests)]
