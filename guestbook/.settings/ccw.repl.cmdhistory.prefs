@@ -1,2 +1,2 @@
-cmdhistory=["(save-message \\"Ana\\" \\"Vozdrica\\")" "(create-guestbook-table)" "(save-message \\"Ana\\" \\"Vozdrica\\")" "(save-message \\"Jelica\\" \\"Hello\\")" "(read-guests)" "(create-user-table)"]
+cmdhistory=["(save-message \\"Ana\\" \\"Vozdrica\\")" "(create-guestbook-table)" "(save-message \\"Ana\\" \\"Vozdrica\\")" "(save-message \\"Jelica\\" \\"Hello\\")" "(read-guests)" "(create-user-table)" "(start-server)"]
 eclipse.preferences.version=1

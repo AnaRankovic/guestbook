@@ -8,20 +8,6 @@
             [noir.util.crypt :as crypt]
             [guestbook.models.db :as db]))
 
-(defn handle-login [id pass]
-(let [user (db/get-user id)]
-(rule (has-value? id)
-[:id "screen name is required"])
-(rule (has-value? pass)
-[:pass "password is required"])
-(rule (and user (crypt/compare pass (:pass user)))
-[:pass "invalid password"])
-(if (errors? :id :pass)
-(login-page)
-(do
-(session/put! :user id)
-(redirect "/")))))
-
 (defn format-error [[error]]
 [:p.error error])
 
@@ -46,22 +32,6 @@
 (control password-field :pass "Password")
 (submit-button "login"))))
 
-(defroutes auth-routes
-(GET "/register" [] (registration-page))
-(POST "/register" [id pass pass1]
-(handle-registration id pass pass1))
-(GET "/login" [] (login-page))
-(POST "/login" [id pass]
-(session/put! :user id)
-(redirect "/"))
-(GET "/logout" []
-(layout/common
-(form-to [:post "/logout"]
-(submit-button "logout"))))
-(POST "/logout" []
-(session/clear!)
-(redirect "/")))
-
 (defn handle-registration [id pass pass1]
 (rule (= pass pass1)
 [:pass "password was not retyped correctly"])
@@ -70,3 +40,36 @@
 (do
 (db/add-user-record {:id id :pass (crypt/encrypt pass)})
 (redirect "/login"))))
+
+(defroutes auth-routes
+(GET "/register" [] (registration-page))
+(POST "/register" [id pass pass1]
+(handle-registration id pass pass1))
+(GET "/login" [] (login-page))
+(POST "/login" [id pass]
+(session/put! :user id)
+(redirect "/"))
+
+(GET "/logout" []
+(layout/common
+(form-to [:post "/logout"]
+(submit-button "logout"))))
+
+(POST "/logout" []
+(session/clear!)
+(redirect "/")))
+
+(defn handle-login [id pass]
+(let [user (db/get-user id)]
+(rule (has-value? id)
+[:id "screen name is required"])
+(rule (has-value? pass)
+[:pass "password is required"])
+(rule (and user (crypt/compare pass (:pass user)))
+[:pass "invalid password"])
+(if (errors? :id :pass)
+(login-page)
+(do
+(session/put! :user id)
+(redirect "/")))))
+

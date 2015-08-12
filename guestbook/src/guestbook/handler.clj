@@ -30,6 +30,7 @@
 (routes auth-routes
 home-routes
 app-routes))
+
 (session/wrap-noir-session
 {:store (memory-store)})
 (wrap-noir-validation)))
