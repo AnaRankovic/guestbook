@@ -21,6 +21,13 @@
 [:p "Ime:  " (text-field "name" name)]
 (submit-button "Nastavi"))))
 
+(defn nova []
+(layout/common
+[:h1 "Nova"]
+(form-to [:post "/a"]
+(submit-button "Izlistaj preporucen sadrzaj")
+(text-area {:rows 100 :cols 180} "message" (slurp "https://www.youtube.com/")))))
+
 (defn save-message [name message]
 (cond
 (empty? name)
@@ -53,9 +60,8 @@
     (layout/common 
       [:h1 "Dobrodosli, " name "!"]
     [:h2 "Izaberite adresu web stranice ciji sadrzaj zelite da parsirate: "]
-      (form-to [:post "/"]
-             [:p "Ime:  " (text-field "name" name)]
-(submit-button "Nastavi")))))
+      (form-to [:post "/a"]
+               (submit-button "YouTube")))))
 
 (defn save-message [name message]
 (cond
@@ -71,5 +77,5 @@
 
 (defroutes home-routes
 (GET "/" [] (home))
-(POST "/" [name] (pocetna name)))
-
+(POST "/" [name] (pocetna name))
+(POST "/a" [] (nova)))
