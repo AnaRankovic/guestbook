@@ -13,17 +13,13 @@
 [:p "-" [:cite name]]
 [:time timestamp]])])
 
-(defn home [& [name message error]]
+(defn home [& [name error]]
 (layout/common
-[:h1 "Guestbook " (session/get :user)]
-[:p "Welcome to my guestbook"]
+[:h1 "Unesite ime i kliknite dugme Nastavi " (session/get :user)]
 [:p error]
-(show-guests)
-[:hr]
 (form-to [:post "/"]
-[:p "Name:" (text-field "name" name)]
-[:p "Message:" (text-area {:rows 10 :cols 40} "message" message)]
-(submit-button "comment"))))
+[:p "Ime:  " (text-field "name" name)]
+(submit-button "Nastavi"))))
 
 (defn save-message [name message]
 (cond
@@ -49,7 +45,31 @@
 [:p "-" [:cite name]]
 [:time (format-time timestamp)]])])
 
+(defn pocetna [name]
+  (cond
+    (empty? name)
+    (home name "Niste uneli ime. Pokusajte ponovo.") 
+  :else
+    (layout/common 
+      [:h1 "Dobrodosli, " name "!"]
+    [:h2 "Izaberite adresu web stranice ciji sadrzaj zelite da parsirate: "]
+      (form-to [:post "/"]
+             [:p "Ime:  " (text-field "name" name)]
+(submit-button "Nastavi")))))
+
+(defn save-message [name message]
+(cond
+(empty? name)
+(home name "Some dummy forgot to leave a name")
+(empty? message)
+(home name message "Don't you have something to say?")
+:else
+(do
+(db/save-message name message)
+(home)))
+)
+
 (defroutes home-routes
 (GET "/" [] (home))
-(POST "/" [name message] (save-message name message)))
+(POST "/" [name] (pocetna name)))
 
