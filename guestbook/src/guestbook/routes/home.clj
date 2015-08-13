@@ -24,9 +24,19 @@
 (defn nova []
 (layout/common
 [:h1 "Nova"]
-(form-to [:post "/a"]
+(form-to [:post "/b"]
 (submit-button "Izlistaj preporucen sadrzaj")
-(text-area {:rows 100 :cols 180} "message" (slurp "https://www.youtube.com/")))))
+(text-area {:rows 100 :cols 180} "message" (slurp "https://www.youtube.com/"))
+)))
+
+(defn listaLinkova []
+(layout/common
+[:h1 "Lista linkova:"]
+;poziva funkciju koja vraca linkove
+(form-to [:post "/b"]
+(submit-button "Pusti random odabranu pesmu od dole navedenih!")
+(text-area {:rows 40 :cols 100} "message" "Bachata")
+)))
 
 (defn save-message [name message]
 (cond
@@ -78,4 +88,5 @@
 (defroutes home-routes
 (GET "/" [] (home))
 (POST "/" [name] (pocetna name))
-(POST "/a" [] (nova)))
+(POST "/a" [] (nova))
+(POST "/b" [] (listaLinkova)))
