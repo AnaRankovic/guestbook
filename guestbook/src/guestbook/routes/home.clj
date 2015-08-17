@@ -3,7 +3,9 @@
 [guestbook.views.layout :as layout]
 [hiccup.form :refer :all]
 [guestbook.models.db :as db]
-[noir.session :as session]))
+[noir.session :as session])
+(:use clojure.java.io)
+)
 
 (defn show-guests []
 [:ul.guests
@@ -21,13 +23,20 @@
 [:p "Ime:  " (text-field "name" name)]
 (submit-button "Nastavi"))))
 
+(def aaa (str "<h3 class=\"yt-lockup-title \"><a href=\""))
+
+(defn upisiHtmlUFajl []
+  (spit "spit.txt" (slurp "https://www.youtube.com/")
+  (with-open [](doseq [line (line-seq (reader "spit.txt"))]
+                         (if(.contains line aaa) (println (subs line (+ (.indexOf line aaa) 38) (+ (.indexOf line aaa) 58))))))))
+
 (defn nova []
 (layout/common
 [:h1 "Nova"]
 (form-to [:post "/b"]
 (submit-button "Izlistaj preporucen sadrzaj")
-(text-area {:rows 100 :cols 180} "message" (slurp "https://www.youtube.com/"))
-)))
+(text-area {:rows 100 :cols 180} "message" (upisiHtmlUFajl)))))
+
 
 (defn listaLinkova []
 (layout/common
