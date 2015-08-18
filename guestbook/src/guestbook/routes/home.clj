@@ -35,8 +35,8 @@
   (spit "spit.txt" (slurp "https://www.youtube.com/"))
   (with-open [](doseq [line (line-seq (reader "spit.txt"))]
                          (if(.contains line aaa) 
-;                           (println (subs line (+ (.indexOf line aaa) 38) (+ (.indexOf line aaa) 58)))
-                            (upisi (subs line (+ (.indexOf line aaa) 38) (+ (.indexOf line aaa) 58)))
+                           (println (subs line (+ (.indexOf line aaa) 38) (+ (.indexOf line aaa) 58))
+                            (upisi (subs line (+ (.indexOf line aaa) 38) (+ (.indexOf line aaa) 58))))
                          ))))
 
 (defn nova []
@@ -54,8 +54,6 @@
 (form-to [:post "/b"]
 (submit-button "Pusti random odabranu pesmu od dole navedenih!")
 (text-area {:rows 40 :cols 100} "message" 
-;           ana
-; "Bachata"
 (upisiHtmlUFajl)
  ))))
 
