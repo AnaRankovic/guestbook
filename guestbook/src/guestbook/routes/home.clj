@@ -7,6 +7,9 @@
 (:use clojure.java.io)
 )
 
+(def ana
+  "Ana")
+
 (defn show-guests []
 [:ul.guests
 (for [{:keys [message name timestamp]} (db/read-guests)]
@@ -25,18 +28,25 @@
 
 (def aaa (str "<h3 class=\"yt-lockup-title \"><a href=\""))
 
+(defn upisi [aaaa]
+              (spit "ana.txt" aaaa  :append true))
+
 (defn upisiHtmlUFajl []
-  (spit "spit.txt" (slurp "https://www.youtube.com/")
+  (spit "spit.txt" (slurp "https://www.youtube.com/"))
   (with-open [](doseq [line (line-seq (reader "spit.txt"))]
-                         (if(.contains line aaa) (println (subs line (+ (.indexOf line aaa) 38) (+ (.indexOf line aaa) 58))))))))
+                         (if(.contains line aaa) 
+;                           (println (subs line (+ (.indexOf line aaa) 38) (+ (.indexOf line aaa) 58)))
+                            (upisi (subs line (+ (.indexOf line aaa) 38) (+ (.indexOf line aaa) 58)))
+                           )
+                         )))
 
 (defn nova []
 (layout/common
 [:h1 "Nova"]
 (form-to [:post "/b"]
 (submit-button "Izlistaj preporucen sadrzaj")
-(text-area {:rows 100 :cols 180} "message" (upisiHtmlUFajl)))))
-
+(text-area {:rows 100 :cols 180} "message" 
+           (slurp "https://www.youtube.com/")))))
 
 (defn listaLinkova []
 (layout/common
@@ -44,8 +54,11 @@
 ;poziva funkciju koja vraca linkove
 (form-to [:post "/b"]
 (submit-button "Pusti random odabranu pesmu od dole navedenih!")
-(text-area {:rows 40 :cols 100} "message" "Bachata")
-)))
+(text-area {:rows 40 :cols 100} "message" 
+;           ana
+; "Bachata"
+(upisiHtmlUFajl)
+ ))))
 
 (defn save-message [name message]
 (cond
