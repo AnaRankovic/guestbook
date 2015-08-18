@@ -51,11 +51,11 @@
 (layout/common
 [:h1 "Lista linkova:"]
 ;poziva funkciju koja vraca linkove
+(upisiHtmlUFajl)
 (form-to [:post "/b"]
 (submit-button "Pusti random odabranu pesmu od dole navedenih!")
-(text-area {:rows 40 :cols 100} "message" 
-(upisiHtmlUFajl)
- ))))
+(text-area {:rows 40 :cols 100} "message" (slurp "ana.txt"))
+ )))
 
 (defn save-message [name message]
 (cond
