@@ -29,7 +29,7 @@
 (def aaa (str "<h3 class=\"yt-lockup-title \"><a href=\""))
 
 (defn upisi [aaaa]
-              (spit "ana.txt" aaaa  :append true))
+              (spit "ana.txt" (str aaaa "\n")  :append true))
 
 (defn upisiHtmlUFajl []
   (spit "spit.txt" (slurp "https://www.youtube.com/"))
@@ -37,8 +37,7 @@
                          (if(.contains line aaa) 
 ;                           (println (subs line (+ (.indexOf line aaa) 38) (+ (.indexOf line aaa) 58)))
                             (upisi (subs line (+ (.indexOf line aaa) 38) (+ (.indexOf line aaa) 58)))
-                           )
-                         )))
+                         ))))
 
 (defn nova []
 (layout/common
