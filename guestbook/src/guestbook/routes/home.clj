@@ -3,12 +3,26 @@
 [guestbook.views.layout :as layout]
 [hiccup.form :refer :all]
 [guestbook.models.db :as db]
-[noir.session :as session])
-(:use clojure.java.io)
+[noir.session :as session]
+[clojure.java.io :as io])
+(:use clojure.java.io
+      clojure.java.browse)
 )
 
-(def ana
-  "Ana")
+;Funkcije za random biranje linije iz fajla:
+(defn rand-seq-elem [sequence]
+  (let [f (fn [[k old] new]
+            [(inc k) (if (zero? (rand-int k)) new old)])]
+    (->> sequence (reduce f [1 nil]) second)))
+
+(defn rand-line [filename]
+     (with-open [reader (io/reader filename)]
+       (rand-seq-elem (line-seq reader))))
+
+;Prikazivanje u novom prozoru
+(defn prikaziRandomOdabraniLink [link]
+  (browse-url (str "https://www.youtube.com/" link))
+)
 
 (defn show-guests []
 [:ul.guests
@@ -53,7 +67,8 @@
 ;poziva funkciju koja vraca linkove
 (upisiHtmlUFajl)
 (form-to [:post "/b"]
-(submit-button "Pusti random odabranu pesmu od dole navedenih!")
+(submit-button "Pusti drugi random link!")
+(prikaziRandomOdabraniLink (rand-line "ana.txt"))
 (text-area {:rows 40 :cols 100} "message" (slurp "ana.txt"))
  )))
 
