@@ -27,7 +27,6 @@
 ;Brise ana.txt
 (defn brisi_filoveKadPrekidasApp []
   (io/delete-file "ana.txt")
-  (io/delete-file "spit.txt")
   )
 
 (defn show-guests []
@@ -58,7 +57,6 @@
                            (println (subs line (+ (.indexOf line aaa) 38) (+ (.indexOf line aaa) 58))
                             (upisi (subs line (+ (.indexOf line aaa) 38) (+ (.indexOf line aaa) 58))))
                          ))))
-
 (defn nova []
 (layout/common
 [:h1 "Nova"]
@@ -67,16 +65,22 @@
 (text-area {:rows 100 :cols 180} "message" 
            (slurp "https://www.youtube.com/")))))
 
-(defn listaLinkova []
+(defn kraj []
 (layout/common
-[:h1 "Lista linkova:"]
-;poziva funkciju koja vraca linkove
-(upisiHtmlUFajl)
-(form-to [:post "/b"]
-(submit-button "Pusti drugi random link!")
-(prikaziRandomOdabraniLink (rand-line "ana.txt"))
-(text-area {:rows 40 :cols 100} "message" (slurp "ana.txt"))
- )))
+      [:h1 "Dovidjenja!!! "]
+      [:h1 "Nadamo se da Vam se svidja YouTube jubox!!! "]))
+
+(defn listaLinkova []
+(layout/common 
+  (upisiHtmlUFajl)
+      (form-to [:post "/b"]
+               (submit-button "Pusti drugi random link!")
+               (prikaziRandomOdabraniLink (rand-line "ana.txt"))
+      )
+      (form-to [:post "/c"]
+        (brisi_filoveKadPrekidasApp)
+        (submit-button "Dosta sam se naslusao. Izlazim iz aplikacije.")        
+        )))
 
 (defn save-message [name message]
 (cond
@@ -109,8 +113,8 @@
   :else
     (layout/common 
       [:h1 "Dobrodosli, " name "!"]
-    [:h2 "Da li zelite da parsirate YouTube sadrzaj: "]
-      (form-to [:post "/a"]
+    [:h2 "Da li zelite pustite na slucajan nacin izabran klip sa YouTube-a? "]
+      (form-to [:post "/b"]
                (submit-button "Da"))
       (form-to [:post "/"]
                (submit-button "Ne")))))
@@ -131,4 +135,5 @@
 (GET "/" [] (home))
 (POST "/" [name] (pocetna name))
 (POST "/a" [] (nova))
-(POST "/b" [] (listaLinkova)))
+(POST "/b" [] (listaLinkova))
+(POST "/c" [] (kraj)))
