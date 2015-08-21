@@ -24,6 +24,12 @@
   (browse-url (str "https://www.youtube.com/" link))
 )
 
+;Brise ana.txt
+(defn brisi_filoveKadPrekidasApp []
+  (io/delete-file "ana.txt")
+  (io/delete-file "spit.txt")
+  )
+
 (defn show-guests []
 [:ul.guests
 (for [{:keys [message name timestamp]} (db/read-guests)]
@@ -99,13 +105,15 @@
 (defn pocetna [name]
   (cond
     (empty? name)
-    (home name "Niste uneli ime. Pokusajte ponovo.") 
+    (home name "Niste uneli ime u donje polje. Pokusajte ponovo.") 
   :else
     (layout/common 
       [:h1 "Dobrodosli, " name "!"]
-    [:h2 "Izaberite adresu web stranice ciji sadrzaj zelite da parsirate: "]
+    [:h2 "Da li zelite da parsirate YouTube sadrzaj: "]
       (form-to [:post "/a"]
-               (submit-button "YouTube")))))
+               (submit-button "Da"))
+      (form-to [:post "/"]
+               (submit-button "Ne")))))
 
 (defn save-message [name message]
 (cond
