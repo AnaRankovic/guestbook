@@ -9,131 +9,84 @@
       clojure.java.browse)
 )
 
-;Funkcije za random biranje linije iz fajla:
 (defn rand-seq-elem [sequence]
+  "Selects arbitrary element in the sequence"
   (let [f (fn [[k old] new]
             [(inc k) (if (zero? (rand-int k)) new old)])]
     (->> sequence (reduce f [1 nil]) second)))
 
 (defn rand-line [filename]
-     (with-open [reader (io/reader filename)]
+  "Select random line from forwarded file"
+  (with-open [reader (io/reader filename)]
        (rand-seq-elem (line-seq reader))))
 
-;Prikazivanje u novom prozoru
-(defn prikaziRandomOdabraniLink [link]
-  (browse-url (str "https://www.youtube.com/" link))
-)
+(defn show-link-in-new-window [link]
+  "Shows forwarded link in new browser window"
+  (browse-url (str "https://www.youtube.com/" link)))
 
-;Brise ana.txt
-(defn brisi_filoveKadPrekidasApp []
-  (io/delete-file "ana.txt")
-  )
-
-(defn show-guests []
-[:ul.guests
-(for [{:keys [message name timestamp]} (db/read-guests)]
-[:li
-[:blockquote message]
-[:p "-" [:cite name]]
-[:time timestamp]])])
+(defn delete-youtube-links-file []
+  "Deletes file with YouTube links"
+  (io/delete-file "youtube-links.txt"))
 
 (defn home [& [name error]]
-(layout/common
-[:h1 "Unesite ime i kliknite dugme Nastavi " (session/get :user)]
+  "Defines components of home page"
+  (layout/common
+[:h1 "Enter your name and click the button \"Continue\"" (session/get :user)]
 [:p error]
 (form-to [:post "/"]
-[:p "Ime:  " (text-field "name" name)]
-(submit-button "Nastavi"))))
+[:p "Name:  " (text-field "name" name)]
+(submit-button "Continue"))))
 
-(def aaa (str "<h3 class=\"yt-lockup-title \"><a href=\""))
+(def break-tag
+  "String after which comes YouTube link"
+  (str "<h3 class=\"yt-lockup-title \"><a href=\""))
 
-(defn upisi [aaaa]
-              (spit "ana.txt" (str aaaa "\n")  :append true))
+(defn write-youtube-links [yt-link]
+  "Writes YouTube links in file"
+  (spit "youtube-links.txt" (str yt-link "\n")  :append true))
 
-(defn upisiHtmlUFajl []
-  (spit "spit.txt" (slurp "https://www.youtube.com/"))
-  (with-open [](doseq [line (line-seq (reader "spit.txt"))]
-                         (if(.contains line aaa) 
-                           (println (subs line (+ (.indexOf line aaa) 38) (+ (.indexOf line aaa) 58))
-                            (upisi (subs line (+ (.indexOf line aaa) 38) (+ (.indexOf line aaa) 58))))
-                         ))))
-(defn nova []
-(layout/common
-[:h1 "Nova"]
-(form-to [:post "/b"]
-(submit-button "Izlistaj preporucen sadrzaj")
-(text-area {:rows 100 :cols 180} "message" 
-           (slurp "https://www.youtube.com/")))))
+(defn write-html-in-file []
+  "Writes YouTube page source in file"
+  (spit "youtube-html.txt" (slurp "https://www.youtube.com/"))
+  (with-open [](doseq [line (line-seq (reader "youtube-html.txt"))]
+                         (if(.contains line break-tag) 
+                           (println (subs line (+ (.indexOf line break-tag) 38) (+ (.indexOf line break-tag) 58))
+                            (write-youtube-links (subs line (+ (.indexOf line break-tag) 38) (+ (.indexOf line break-tag) 58))))))))
 
-(defn kraj []
-(layout/common
-      [:h1 "Dovidjenja!!! "]
-      [:h1 "Nadamo se da Vam se svidja YouTube jubox!!! "]))
+(defn goodbye-page []
+  "Defines components of home page"
+  (layout/common
+      [:h1 "Goodbye ! "]
+        [:h1 "I hope you like the YouTube jukebox!!! "]))
 
-(defn listaLinkova []
-(layout/common 
-  (upisiHtmlUFajl)
-      (form-to [:post "/b"]
-               (submit-button "Pusti drugi random link!")
-               (prikaziRandomOdabraniLink (rand-line "ana.txt"))
-      )
-      (form-to [:post "/c"]
-        (brisi_filoveKadPrekidasApp)
-        (submit-button "Dosta sam se naslusao. Izlazim iz aplikacije.")        
-        )))
+(defn play-link-page []
+  "Defines components of page for playing random clips"
+  (layout/common 
+      (form-to [:post "/playclip"]
+               (submit-button "Play other random clip!")
+               (write-html-in-file)
+                 (show-link-in-new-window (rand-line "youtube-links.txt"))
+        )
+      (form-to [:post "/goodbye"]
+        (submit-button "I've had enough clips. Exit!")        
+          (delete-youtube-links-file))))
 
-(defn save-message [name message]
-(cond
-(empty? name)
-(home name message "Some dummy forgot to leave a name")
-(empty? message)
-(home name message "Don't you have something to say?")
-:else
-(do
-(db/save-message name message)
-(home))))
-
-(defn format-time [timestamp]
-(-> "dd/MM/yyyy"
-(java.text.SimpleDateFormat.)
-(.format timestamp)))
-
-(defn show-guests []
-[:ul.guests
-(for [{:keys [message name timestamp]} (db/read-guests)]
-[:li
-[:blockquote message]
-[:p "-" [:cite name]]
-[:time (format-time timestamp)]])])
-
-(defn pocetna [name]
+(defn welcome-page [name]
+  "Defines components of welcome page"
   (cond
     (empty? name)
-    (home name "Niste uneli ime u donje polje. Pokusajte ponovo.") 
+    (home name "You did not enter a name in the box below. Try again.") 
   :else
     (layout/common 
-      [:h1 "Dobrodosli, " name "!"]
-    [:h2 "Da li zelite pustite na slucajan nacin izabran klip sa YouTube-a? "]
-      (form-to [:post "/b"]
-               (submit-button "Da"))
+      [:h1 "Welcome, " name "!"]
+    [:h2 "Do you want to play random clip from YouTube? "]
+      (form-to [:post "/playclip"]
+               (submit-button "Yes"))
       (form-to [:post "/"]
-               (submit-button "Ne")))))
-
-(defn save-message [name message]
-(cond
-(empty? name)
-(home name "Some dummy forgot to leave a name")
-(empty? message)
-(home name message "Don't you have something to say?")
-:else
-(do
-(db/save-message name message)
-(home)))
-)
+               (submit-button "No")))))
 
 (defroutes home-routes
 (GET "/" [] (home))
-(POST "/" [name] (pocetna name))
-(POST "/a" [] (nova))
-(POST "/b" [] (listaLinkova))
-(POST "/c" [] (kraj)))
+(POST "/" [name] (welcome-page name))
+(POST "/playclip" [] (play-link-page))
+(POST "/goodbye" [] (goodbye-page)))
