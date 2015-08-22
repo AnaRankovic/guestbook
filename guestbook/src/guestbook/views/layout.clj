@@ -4,6 +4,7 @@
 (defn common [& body]
   (html5
     [:head
-     [:title "Welcome to guestbook"]
+     [:title "YouTube random jukebox"]
      (include-css "/css/screen.css")]
-    [:body body]))
+    [:body body
+     (include-css "/css/screen.css")]))
