@@ -5,8 +5,10 @@
                  [compojure "1.1.5"]
                  [hiccup "1.0.4"]
                  [ring-server "0.3.0"]
-                 [lib-noir "0.7.6"]]  
-  :plugins [[lein-ring "0.8.12"]]
+                 [lib-noir "0.7.6"]
+                 [midje "1.4.0"]]  
+  :plugins [[lein-ring "0.8.12"]
+            [lein-midje "3.1.3"]]
   :ring {:handler guestbook.handler/app
          :init guestbook.handler/init
          :destroy guestbook.handler/destroy}

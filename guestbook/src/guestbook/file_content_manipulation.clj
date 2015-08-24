@@ -1,11 +1,11 @@
 (ns guestbook.file-content-manipulation
   (:require [compojure.core :refer :all]
-[guestbook.views.layout :as layout]
-[hiccup.form :refer :all]
-[noir.session :as session]
-[clojure.java.io :as io])
-(:use clojure.java.io
-      clojure.java.browse))
+            [guestbook.views.layout :as layout]
+            [hiccup.form :refer :all]
+            [noir.session :as session]
+            [clojure.java.io :as io])
+  (:use clojure.java.io
+        clojure.java.browse))
 
 (defn rand-seq-elem [sequence]
   "Selects arbitrary line"
@@ -30,8 +30,8 @@
   "Writes YouTube page source in file"
   (spit "youtube-html.txt" (slurp "https://www.youtube.com/"))
   (with-open [](doseq [line (line-seq (reader "youtube-html.txt"))]
-                         (if(.contains line break-tag) 
-                           (println (subs line (+ (.indexOf line break-tag) 38) (+ (.indexOf line break-tag) 58))
+                 (if(.contains line break-tag)
+                   (println (subs line (+ (.indexOf line break-tag) 38) (+ (.indexOf line break-tag) 58))
                             (write-youtube-links (subs line (+ (.indexOf line break-tag) 38) (+ (.indexOf line break-tag) 58))))))))
 
 (defn delete-youtube-links-file []

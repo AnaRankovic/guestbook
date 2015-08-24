@@ -17,9 +17,9 @@
   (println "YouTube random jukebox is shutting down"))
 
 (def app
-(->
-(handler/site
-(routes 
-home-routes))
-(session/wrap-noir-session
-{:store (memory-store)})))
+  (->
+    (handler/site
+      (routes 
+        home-routes))
+    (session/wrap-noir-session
+      {:store (memory-store) })))

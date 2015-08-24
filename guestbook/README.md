@@ -3,9 +3,8 @@
 Dear reader,
 
 You are one step distanced from running project that is result of learning programming language Clojure. 
-This project uses Leiningen, Ring server. Session
 
-This app is YouTube jukebox, when you wan't surprise in your life, you use this app which plays random YouTube clip.
+This app is YouTube jukebox, when you wan't surprise in your life, so you use this app which plays random YouTube clip.
 I started with basic concepts in Clojure, and as literature I used this books(among others): 
 	-"Web Development with Clojure", Dmitri Sotnikov
 	-"Programming collective inteligence", O'Reilly 
@@ -18,16 +17,20 @@ In this project put everything related to parsing web-content, and then I remove
 #Funcioning on highest level of abstraction:
 
 1.Starting application
-2.User enters his name and clics button "Continue"
+2.User enters his name and clicks button "Continue"
 3.Application welcomes user. Do you want to play random clip from YouTube? system asks.
 	3.1.User clicks "No" --> gets redirected on home page
 	3.2.User clicks "Yes" --> in new tab is played random YouTube clip, and User is redirected to page "http://localhost:8080/playclip"
 		3.2.1.User clicks on button "Play other random clip!" --> in new tab is played random YouTube clip
 		3.2.2.User clicks on button "I've had enough clips. Exit!" --> he's been redirected to goodbye page
 
-## Running
+## Running application
 
-Simply run the repl.clj namespace. When REPL is started, call the function "start-server", which will open home-page in web-browser.
+Simply run the guestbook.repl namespace. When REPL is started, call the function "start-server", which will open home-page in web-browser.
+
+## Running application
+
+Run the guestbook.test.handler namespace. When REPL is started, call the function "run-tests", which will run 1 test containing 6 assertions successfully.
 
 #Namespaces and corresponding functions
 
@@ -37,8 +40,8 @@ Simply run the repl.clj namespace. When REPL is started, call the function "star
 
 	#rand-seq-elem
   
-  Function that contants algorithm that chooses random line from file "youtube-links.txt".
-  Body of this function is algotithm:
+  Function that contains algorithm that chooses random line from file "youtube-links.txt".
+  Body of this function is algorithm:
   
     (let [f (fn [[k old] new]
             [(inc k) (if (zero? (rand-int k)) new old)])]
@@ -79,20 +82,8 @@ Simply run the repl.clj namespace. When REPL is started, call the function "star
 	#app
 	
   The entry point in application through which all the requests to application will be routed.
-	******** (session/wrap-noir-session {:store (memory-store)}) - OVAJ DEO POSEBNO PROKOMENTARISI
-	
 	
 ##guestbook.repl
-
-  aa
-  
-	#server
-	
-  aa
-	
-	#get-handler
-	
-  aa
   
 	#start-server
 	
@@ -112,19 +103,19 @@ Simply run the repl.clj namespace. When REPL is started, call the function "star
 	
 ##guestbook.routes.pages
 
-  This namespace is responsible for handling pages of this web aplication.
+  This namespace is responsible for handling pages of this web application.
 
 	#home
 
-  Defines components of home page. Has validation, and if user didn't enter his name, error message is shown. When user enters his name and press button "Continue", redirected to welcome page.	
+  Defines components of home page. Has validation, and if user didn't enter his name, error message is shown. When user enters his name and press button "Continue", he gets redirected to /welcome page.	
 	
 	#welcome-page
 	
-  Defines components of welcome page. User is welcomed by his name, and he is asked if he wants to play random clip from YouTube. If he clicks Yes, redirected to playclip page, and in new tab is opened randomly chosen YouTube link. If he clicks No, he gets returned to previous page.
+  Defines components of welcome page. User is welcomed by his name, and he is asked if he wants to play random clip from YouTube. If he clicks Yes, redirected to /playclip page, and in new tab is opened randomly chosen YouTube link. If he clicks No, he gets returned to previous page.
 	
 	#play-link-page
 	
-  Defines components of page for playing random clips. If User clicks button "Play other random clip!" in new tab is opened randomly chosen YouTube link. Thus, if he clics button "I've had enough clips. Exit!" he gets redirected to goodbye page.
+  Defines components of page for playing random clips. If User clicks button "Play other random clip!" in new tab is opened randomly chosen YouTube link. Thus, if he clicks button "I've had enough clips. Exit!" he gets redirected to /goodbye page.
   	
 	#goodbye-page
 	
@@ -145,11 +136,18 @@ Simply run the repl.clj namespace. When REPL is started, call the function "star
 ## Conclusion
 
 
-At first I had some thoube to get used to Clojure's syntax and funcional programming in general, but later on shatila sam jednostavnot i lepotu jezika.  jednostavno .... It's all about functions can use input from another function and get passed to some other function.
+At first I had some trouble to get used to Clojure's syntax and funcional programming in general, but later on I realized beauty and simplicity of Clojure. 
+It's all about functions can use input from another function and get passed to some other function.
+
+I did lot of research on this topic, and had plenty of dilemmas along the way. One of them was should I parse YouTube source code like html or like string. I've picked the second option which opened me whole brave new world when it comes to string manipulation.
+
+My second dilemma was should I provide login page for User, and save his credentials in database. If you look first commits, you'll se that I've implemented that option, but later on I realized that it's unnecessary in my case.
+
+Another dilemma was to choose proper algorithm that will pick random link from file.
+
+My leading idea was to make as simple as possible solution, that works a job.
+I hope I succeeded in that intention.
 
 Best regards,
 
 Ana Rankovic
-
-*********** Dodaj testove
-************* Pisi i o sesiji

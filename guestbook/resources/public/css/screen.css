@@ -7,7 +7,6 @@ font-size: 18px;
 }
 
 h1 {
-    text-align: center;
+    text-align: justify;
+    text-decoration: line-through;
 }
-
-

@@ -4,11 +4,15 @@
         guestbook.handler))
 
 (deftest test-app
-  (testing "main route"
+  (testing "Home GET route"
     (let [response (app (request :get "/"))]
       (is (= (:status response) 200))
-      (is (.contains (:body response) "Hello World"))))
-
-  (testing "not-found route"
-    (let [response (app (request :get "/invalid"))]
-      (is (= (:status response) 404)))))
+      (is (.contains (:body response) "Enter your name and click the button \"Continue\""))))
+  (testing "Playclip POST route"
+    (let [response (app (request :post "/playclip"))]
+      (is (= (:status response) 200))
+      (is (.contains (:body response) "Choose action:"))))
+  (testing "Goodbye POST route"
+    (let [response (app (request :post "/goodbye"))]
+      (is (= (:status response) 200))
+      (is (.contains (:body response) "Goodbye !")))))
