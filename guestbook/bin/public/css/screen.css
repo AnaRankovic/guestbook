@@ -1,0 +1,12 @@
+body {
+margin: 3px;
+background: red;
+color: fuchsia;
+font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+font-size: 18px;
+}
+
+h1 {
+    text-align: justify;
+    text-decoration: line-through;
+}
